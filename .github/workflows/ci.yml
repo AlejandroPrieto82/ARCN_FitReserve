@@ -2,14 +2,19 @@ name: CI + Sonar
 
 on:
 push:
-branches: [ "main", "develop" ]
+branches:
+- main
+- develop
 pull_request:
-branches: [ "main", "develop" ]
+branches:
+- main
+- develop
 
 jobs:
 build:
 runs-on: ubuntu-latest
 
+```
 steps:
   - name: Checkout
     uses: actions/checkout@v4
@@ -26,8 +31,9 @@ steps:
 
   - name: SonarCloud Scan
     run: |
-      mvn sonar:sonar
-      -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-      -Dsonar.organization=${{ secrets.SONAR_ORG }}
-      -Dsonar.host.url=https://sonarcloud.io
-      -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      mvn sonar:sonar \
+        -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+        -Dsonar.organization=${{ secrets.SONAR_ORG }} \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+```
