@@ -18,17 +18,18 @@ steps:
   - name: Set up JDK 17
     uses: actions/setup-java@v4
     with:
-      distribution: 'temurin'
-      java-version: '17'
-      cache: 'maven'
+      distribution: temurin
+      java-version: 17
+      cache: maven
 
   - name: Build (sin tests)
     run: mvn -B clean verify -DskipTests
 
   - name: SonarCloud Scan
-    run: mvn sonar:sonar \
-      -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
-      -Dsonar.organization=${{ secrets.SONAR_ORG }} \
-      -Dsonar.host.url=https://sonarcloud.io \
+    run: |
+      mvn sonar:sonar
+      -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
+      -Dsonar.organization=${{ secrets.SONAR_ORG }}
+      -Dsonar.host.url=https://sonarcloud.io
       -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 ```
