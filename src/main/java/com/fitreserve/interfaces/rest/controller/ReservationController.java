@@ -1,12 +1,10 @@
 package com.fitreserve.interfaces.rest.controller;
 
-import com.fitreserve.application.usecase.CancelReservationUseCase;
-import com.fitreserve.application.usecase.CreateReservationUseCase;
-import com.fitreserve.application.usecase.GetUserReservationsUseCase;
-
-import com.fitreserve.domain.model.Reservation;
-import com.fitreserve.shared.util.ApiResponse;
+import com.fitreserve.application.usecase.*;
 import com.fitreserve.interfaces.rest.request.CreateReservationRequest;
+import com.fitreserve.interfaces.rest.response.CreateReservationResponse;
+import com.fitreserve.interfaces.rest.response.ReservationResponse;
+import com.fitreserve.shared.util.ApiResponse;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -29,24 +27,18 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ApiResponse<Reservation> create(@RequestBody CreateReservationRequest request) {
-
-        Reservation reservation = createReservationUseCase.execute(
-                request.getUserId(),
-                request.getClassId()
-        );
-
-        return new ApiResponse<>(reservation);
+    public ApiResponse<CreateReservationResponse> create(@RequestBody CreateReservationRequest request) {
+        return ApiResponse.of(createReservationUseCase.execute(request));
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<String> cancel(@PathVariable String id) {
         cancelReservationUseCase.execute(id);
-        return new ApiResponse<>("Reservation cancelled");
+        return ApiResponse.of("Reservation cancelled");
     }
 
     @GetMapping("/user/{userId}")
-    public ApiResponse<List<Reservation>> getByUser(@PathVariable String userId) {
-        return new ApiResponse<>(getUserReservationsUseCase.execute(userId));
+    public ApiResponse<List<ReservationResponse>> getByUser(@PathVariable String userId) {
+        return ApiResponse.of(getUserReservationsUseCase.execute(userId));
     }
 }

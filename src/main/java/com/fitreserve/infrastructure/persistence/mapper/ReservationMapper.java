@@ -1,34 +1,25 @@
 package com.fitreserve.infrastructure.persistence.mapper;
 
-import com.fitreserve.domain.model.Reservation;
-import com.fitreserve.domain.model.ReservationStatus;
+import com.fitreserve.domain.model.*;
 import com.fitreserve.domain.valueobject.*;
 import com.fitreserve.infrastructure.persistence.entity.ReservationEntity;
-import org.springframework.stereotype.Component;
 
-@Component
 public class ReservationMapper {
 
-    public Reservation toDomain(ReservationEntity entity) {
-        Reservation reservation = new Reservation(
-                new ReservationId(entity.getId()),
-                new UserId(entity.getUserId()),
-                new ClassId(entity.getClassId())
+    public static ReservationEntity toEntity(Reservation r) {
+        return new ReservationEntity(
+                r.getId().getValue(),
+                r.getUserId().getValue(),
+                r.getClassId().getValue(),
+                r.getStatus().name()
         );
-
-        if ("CANCELLED".equals(entity.getStatus())) {
-            reservation.cancel();
-        }
-
-        return reservation;
     }
 
-    public ReservationEntity toEntity(Reservation reservation) {
-        return new ReservationEntity(
-                reservation.getId().getValue(),
-                reservation.getUserId().getValue(),
-                reservation.getClassId().getValue(),
-                reservation.getStatus().name()
+    public static Reservation toDomain(ReservationEntity e) {
+        return new Reservation(
+                new ReservationId(e.getId()),
+                new UserId(e.getUserId()),
+                new ClassId(e.getClassId())
         );
     }
 }

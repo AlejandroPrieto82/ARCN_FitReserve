@@ -2,9 +2,9 @@ package com.fitreserve.interfaces.rest.controller;
 
 import com.fitreserve.application.usecase.CreateUserUseCase;
 import com.fitreserve.application.usecase.DeactivateUserUseCase;
-import com.fitreserve.domain.model.User;
-import com.fitreserve.shared.util.ApiResponse;
 import com.fitreserve.interfaces.rest.request.CreateUserRequest;
+import com.fitreserve.interfaces.rest.response.UserResponse;
+import com.fitreserve.shared.util.ApiResponse;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -22,20 +22,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ApiResponse<User> create(@RequestBody CreateUserRequest request) {
-
-        User user = createUserUseCase.execute(
-                request.getEmail(),
-                request.getPassword(),
-                request.getRole()
-        );
-
-        return new ApiResponse<>(user);
+    public ApiResponse<UserResponse> create(@RequestBody CreateUserRequest request) {
+        return ApiResponse.of(createUserUseCase.execute(request));
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<String> deactivate(@PathVariable String id) {
         deactivateUserUseCase.execute(id);
-        return new ApiResponse<>("User deactivated");
+        return ApiResponse.of("User deactivated");
     }
 }

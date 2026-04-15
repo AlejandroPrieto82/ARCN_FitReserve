@@ -11,7 +11,6 @@ public class ReservationEntity {
     private UUID id;
 
     private UUID userId;
-
     private UUID classId;
 
     private String status;
@@ -29,9 +28,4 @@ public class ReservationEntity {
     public UUID getUserId() { return userId; }
     public UUID getClassId() { return classId; }
     public String getStatus() { return status; }
-
-    public void setId(UUID id) { this.id = id; }
-    public void setUserId(UUID userId) { this.userId = userId; }
-    public void setClassId(UUID classId) { this.classId = classId; }
-    public void setStatus(String status) { this.status = status; }
 }
