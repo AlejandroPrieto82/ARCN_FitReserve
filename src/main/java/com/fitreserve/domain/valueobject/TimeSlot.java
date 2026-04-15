@@ -5,32 +5,28 @@ import java.time.LocalDateTime;
 public class TimeSlot {
 
     private final LocalDateTime start;
-    private final int durationMinutes;
+    private final LocalDateTime end;
 
-    public TimeSlot(LocalDateTime start, int durationMinutes) {
-
-        if (start == null) {
-            throw new IllegalArgumentException("Start time cannot be null");
+    public TimeSlot(LocalDateTime start, LocalDateTime end) {
+        if (start == null || end == null) {
+            throw new IllegalArgumentException("TimeSlot cannot be null");
         }
 
-        if (durationMinutes <= 0) {
-            throw new IllegalArgumentException("Duration must be > 0");
+        if (end.isBefore(start)) {
+            throw new IllegalArgumentException("End must be after start");
         }
 
         this.start = start;
-        this.durationMinutes = durationMinutes;
+        this.end = end;
     }
 
-    public LocalDateTime getStart() {
-        return start;
+    public static TimeSlot fromStrings(String start, String end) {
+        return new TimeSlot(
+                LocalDateTime.parse(start),
+                LocalDateTime.parse(end)
+        );
     }
 
-    public LocalDateTime getEnd() {
-        return start.plusMinutes(durationMinutes);
-    }
-
-    public boolean overlaps(TimeSlot other) {
-        return !(this.getEnd().isBefore(other.start) ||
-                 this.start.isAfter(other.getEnd()));
-    }
+    public LocalDateTime getStart() { return start; }
+    public LocalDateTime getEnd() { return end; }
 }

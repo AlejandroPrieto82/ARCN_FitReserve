@@ -1,6 +1,5 @@
 package com.fitreserve.domain.model;
 
-import com.fitreserve.domain.exception.BusinessException;
 import com.fitreserve.domain.valueobject.*;
 
 public class GymClass {
@@ -21,45 +20,19 @@ public class GymClass {
         this.reserved = 0;
     }
 
+    public boolean hasAvailableSpots() {
+        return reserved < capacity.getValue();
+    }
+
     public void reserveSpot() {
-        if (reserved >= capacity.getValue()) {
-            throw new BusinessException("Class is full");
+        if (!hasAvailableSpots()) {
+            throw new RuntimeException("No spots available");
         }
         reserved++;
     }
 
-    public void cancelReservation() {
-        if (reserved <= 0) {
-            throw new BusinessException("No reservations to cancel");
-        }
-        reserved--;
-    }
-
-    public boolean isFull() {
-        return reserved >= capacity.getValue();
-    }
-
-    public ClassId getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public ClassType getType() {
-        return type;
-    }
-
-    public TimeSlot getTimeSlot() {
-        return timeSlot;
-    }
-
-    public int getReserved() {
-        return reserved;
-    }
-
-    public Cupo getCapacity() {
-        return capacity;
-    }
+    public ClassId getId() { return id; }
+    public String getName() { return name; }
+    public ClassType getType() { return type; }
+    public Cupo getCapacity() { return capacity; }
 }

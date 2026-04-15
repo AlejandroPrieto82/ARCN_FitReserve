@@ -7,19 +7,19 @@ import com.fitreserve.domain.valueobject.UserId;
 
 public class DeactivateUserUseCase {
 
-    private final UserRepository userRepository;
+    private final UserRepository repository;
 
-    public DeactivateUserUseCase(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public DeactivateUserUseCase(UserRepository repository) {
+        this.repository = repository;
     }
 
     public void execute(String userId) {
 
-        User user = userRepository.findById(new UserId(userId))
+        User user = repository.findById(UserId.fromString(userId))
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.deactivate();
 
-        userRepository.save(user);
+        repository.save(user);
     }
 }
