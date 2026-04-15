@@ -1,11 +1,11 @@
 package com.fitreserve.application.usecase;
 
-import com.fitreserve.application.dto.CreateGymClassRequest;
-import com.fitreserve.application.dto.GymClassResponse;
 import com.fitreserve.domain.model.ClassType;
 import com.fitreserve.domain.model.GymClass;
 import com.fitreserve.domain.repository.GymClassRepository;
-import com.fitreserve.domain.valueobject.*;
+import com.fitreserve.domain.valueobject.ClassId;
+import com.fitreserve.domain.valueobject.Cupo;
+import com.fitreserve.domain.valueobject.TimeSlot;
 
 import java.util.UUID;
 
@@ -17,31 +17,16 @@ public class CreateGymClassUseCase {
         this.repository = repository;
     }
 
-    public GymClassResponse execute(CreateGymClassRequest request) {
-
-        TimeSlot timeSlot = TimeSlot.fromStrings(
-                request.getStartTime(),
-                request.getEndTime()
-        );
+    public GymClass execute(String name, String type, String start, String end, int capacity) {
 
         GymClass gymClass = new GymClass(
                 new ClassId(UUID.randomUUID()),
-                request.getName(),
-                ClassType.valueOf(request.getType().toUpperCase()),
-                timeSlot,
-                new Cupo(request.getCapacity())
+                name,
+                ClassType.valueOf(type.toUpperCase()),
+                TimeSlot.fromStrings(start, end),
+                new Cupo(capacity)
         );
 
-        repository.save(gymClass);
-
-        return new GymClassResponse(
-                gymClass.getId().getValue().toString(),
-                gymClass.getName(),
-                gymClass.getType().name(),
-                gymClass.getTimeSlot().getStart().toString(),
-                gymClass.getTimeSlot().getEnd().toString(),
-                gymClass.getCapacity().getValue(),
-                0
-        );
+        return repository.save(gymClass);
     }
 }

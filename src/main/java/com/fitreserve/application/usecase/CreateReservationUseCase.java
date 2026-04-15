@@ -1,7 +1,5 @@
 package com.fitreserve.application.usecase;
 
-import com.fitreserve.application.dto.CreateReservationRequest;
-import com.fitreserve.application.dto.CreateReservationResponse;
 import com.fitreserve.domain.exception.BusinessException;
 import com.fitreserve.domain.exception.NotFoundException;
 import com.fitreserve.domain.model.GymClass;
@@ -11,6 +9,8 @@ import com.fitreserve.domain.repository.GymClassRepository;
 import com.fitreserve.domain.repository.ReservationRepository;
 import com.fitreserve.domain.repository.UserRepository;
 import com.fitreserve.domain.valueobject.*;
+
+import java.util.UUID;
 
 public class CreateReservationUseCase {
 
@@ -28,33 +28,33 @@ public class CreateReservationUseCase {
         this.classRepository = classRepository;
     }
 
-    public CreateReservationResponse execute(CreateReservationRequest request) {
+    public Reservation execute(String userId, String classId) {
 
-        UserId userId = UserId.fromString(request.getUserId());
-        ClassId classId = ClassId.fromString(request.getClassId());
+        UserId uid = UserId.fromString(userId);
+        ClassId cid = ClassId.fromString(classId);
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(uid)
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         if (!user.isActive()) {
             throw new BusinessException("User inactive");
         }
 
-        GymClass gymClass = classRepository.findById(classId)
+        GymClass gymClass = classRepository.findById(cid)
                 .orElseThrow(() -> new NotFoundException("Class not found"));
 
         if (!gymClass.hasAvailableSpots()) {
             throw new BusinessException("Class full");
         }
 
-        if (reservationRepository.existsByUserIdAndClassId(userId, classId)) {
+        if (reservationRepository.existsByUserIdAndClassId(uid, cid)) {
             throw new BusinessException("Already reserved");
         }
 
         Reservation reservation = new Reservation(
-                ReservationId.generate(),
-                userId,
-                classId
+                new ReservationId(UUID.randomUUID()),
+                uid,
+                cid
         );
 
         gymClass.reserveSpot();
@@ -62,9 +62,6 @@ public class CreateReservationUseCase {
         reservationRepository.save(reservation);
         classRepository.save(gymClass);
 
-        return new CreateReservationResponse(
-                reservation.getId().getValue().toString(),
-                "Reservation created"
-        );
+        return reservation;
     }
 }

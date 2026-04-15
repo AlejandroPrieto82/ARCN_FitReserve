@@ -1,11 +1,11 @@
 package com.fitreserve.application.usecase;
 
-import com.fitreserve.application.dto.CreateUserRequest;
-import com.fitreserve.application.dto.UserResponse;
 import com.fitreserve.domain.model.User;
 import com.fitreserve.domain.model.UserRole;
 import com.fitreserve.domain.repository.UserRepository;
-import com.fitreserve.domain.valueobject.*;
+import com.fitreserve.domain.valueobject.Email;
+import com.fitreserve.domain.valueobject.Password;
+import com.fitreserve.domain.valueobject.UserId;
 
 import java.util.UUID;
 
@@ -17,24 +17,17 @@ public class CreateUserUseCase {
         this.repository = repository;
     }
 
-    public UserResponse execute(CreateUserRequest request) {
+    public User execute(String email, String password, String role) {
 
-        UserRole role = UserRole.valueOf(request.getRole().toUpperCase());
+        UserRole userRole = UserRole.valueOf(role.toUpperCase());
 
         User user = new User(
                 new UserId(UUID.randomUUID()),
-                new Email(request.getEmail()),
-                new Password(request.getPassword()),
-                role
+                new Email(email),
+                new Password(password),
+                userRole
         );
 
-        repository.save(user);
-
-        return new UserResponse(
-                user.getId().getValue().toString(),
-                user.getEmail().getValue(),
-                user.getRole().name(),
-                user.isActive()
-        );
+        return repository.save(user);
     }
 }

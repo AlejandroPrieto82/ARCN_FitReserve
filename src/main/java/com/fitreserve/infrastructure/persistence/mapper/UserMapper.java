@@ -4,21 +4,20 @@ import com.fitreserve.domain.model.User;
 import com.fitreserve.domain.model.UserRole;
 import com.fitreserve.domain.valueobject.*;
 import com.fitreserve.infrastructure.persistence.entity.UserEntity;
-import org.springframework.stereotype.Component;
 
-@Component
 public class UserMapper {
 
-    public User toDomain(UserEntity entity) {
+    public static User toDomain(UserEntity entity) {
         return new User(
                 new UserId(entity.getId()),
                 new Email(entity.getEmail()),
                 new Password(entity.getPassword()),
-                UserRole.valueOf(entity.getRole())
+                UserRole.valueOf(entity.getRole()),
+                entity.isActive()
         );
     }
 
-    public UserEntity toEntity(User user) {
+    public static UserEntity toEntity(User user) {
         return new UserEntity(
                 user.getId().getValue(),
                 user.getEmail().getValue(),

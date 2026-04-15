@@ -1,4 +1,4 @@
-package com.fitreserve.application.dto;
+package com.fitreserve.interfaces.rest.response;
 
 public class CreateReservationResponse {
 
@@ -10,11 +10,6 @@ public class CreateReservationResponse {
         this.message = message;
     }
 
-    public String getReservationId() {
-        return reservationId;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+    public String getReservationId() { return reservationId; }
+    public String getMessage() { return message; }
 }

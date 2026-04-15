@@ -11,34 +11,24 @@ public class User {
     private boolean active;
 
     public User(UserId id, Email email, Password password, UserRole role) {
+        this(id, email, password, role, true);
+    }
+
+    public User(UserId id, Email email, Password password, UserRole role, boolean active) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.role = role;
-        this.active = true;
+        this.active = active;
     }
+
+    public UserId getId() { return id; }
+    public Email getEmail() { return email; }
+    public Password getPassword() { return password; }
+    public UserRole getRole() { return role; }
+    public boolean isActive() { return active; }
 
     public void deactivate() {
         this.active = false;
-    }
-
-    public UserId getId() {
-        return id;
-    }
-
-    public Email getEmail() {
-        return email;
-    }
-
-    public Password getPassword() {
-        return password;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public boolean isActive() {
-        return active;
     }
 }
