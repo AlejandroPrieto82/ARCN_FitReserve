@@ -1,25 +1,25 @@
 package com.fitreserve.application.usecase;
 
-import com.fitreserve.application.dto.CreateReservationRequest;
-import com.fitreserve.application.dto.CreateReservationResponse;
 import com.fitreserve.domain.exception.BusinessException;
-import com.fitreserve.domain.exception.ValidationException;
-import com.fitreserve.domain.model.Reservation;
-import com.fitreserve.domain.model.ReservationStatus;
+import com.fitreserve.domain.model.GymClass;
+import com.fitreserve.domain.model.User;
+import com.fitreserve.domain.repository.GymClassRepository;
 import com.fitreserve.domain.repository.ReservationRepository;
+import com.fitreserve.domain.repository.UserRepository;
+import com.fitreserve.interfaces.rest.request.CreateReservationRequest;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateReservationUseCaseTest {
@@ -27,166 +27,139 @@ class CreateReservationUseCaseTest {
     @Mock
     private ReservationRepository reservationRepository;
 
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private GymClassRepository classRepository;
+
     @InjectMocks
-    private CreateReservationUseCase createReservationUseCase;
+    private CreateReservationUseCase useCase;
 
     @Test
     void shouldCreateReservationSuccessfully() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                "user-1",
-                "session-1",
-                true,
-                false,
-                true
-        );
-        when(reservationRepository.save(any(Reservation.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
 
-        // Act
-        CreateReservationResponse response = createReservationUseCase.execute(request);
+        CreateReservationRequest request =
+                new CreateReservationRequest(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString()
+                );
 
-        // Assert
+        User user = mock(User.class);
+        GymClass gymClass = mock(GymClass.class);
+
+        when(user.isActive()).thenReturn(true);
+        when(gymClass.hasAvailableSpots()).thenReturn(true);
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(classRepository.findById(any())).thenReturn(Optional.of(gymClass));
+        when(reservationRepository.existsByUserIdAndClassId(any(), any()))
+                .thenReturn(false);
+
+        when(reservationRepository.save(any()))
+                .thenAnswer(i -> i.getArgument(0));
+
+        var response = useCase.execute(request);
+
         assertNotNull(response);
-        assertEquals(ReservationStatus.ACTIVE, response.getStatus());
-        verify(reservationRepository).save(any(Reservation.class));
+        assertEquals("Reservation created", response.getMessage());
+
+        verify(reservationRepository, times(1)).save(any());
     }
 
     @Test
-    void shouldThrowExceptionWhenUserIsNotActive() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                "user-1",
-                "session-1",
-                false,
-                false,
-                true
-        );
+    void shouldThrowWhenUserNotFound() {
 
-        // Act
-        assertThrows(BusinessException.class, () -> createReservationUseCase.execute(request));
+        CreateReservationRequest request =
+                new CreateReservationRequest(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString()
+                );
 
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
+        when(userRepository.findById(any()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class,
+                () -> useCase.execute(request));
+
+        verify(reservationRepository, never()).save(any());
     }
 
     @Test
-    void shouldThrowExceptionWhenDuplicateReservation() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                "user-1",
-                "session-1",
-                true,
-                true,
-                true
-        );
+    void shouldThrowWhenUserInactive() {
 
-        // Act
-        assertThrows(BusinessException.class, () -> createReservationUseCase.execute(request));
+        CreateReservationRequest request =
+                new CreateReservationRequest(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString()
+                );
 
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
+        User user = mock(User.class);
+        when(user.isActive()).thenReturn(false);
+
+        when(userRepository.findById(any()))
+                .thenReturn(Optional.of(user));
+
+        assertThrows(BusinessException.class,
+                () -> useCase.execute(request));
+
+        verify(reservationRepository, never()).save(any());
     }
 
     @Test
-    void shouldThrowExceptionWhenNoCapacity() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                "user-1",
-                "session-1",
-                true,
-                false,
-                false
-        );
+    void shouldThrowWhenClassFull() {
 
-        // Act
-        assertThrows(BusinessException.class, () -> createReservationUseCase.execute(request));
+        CreateReservationRequest request =
+                new CreateReservationRequest(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString()
+                );
 
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
+        User user = mock(User.class);
+        GymClass gymClass = mock(GymClass.class);
+
+        when(user.isActive()).thenReturn(true);
+        when(gymClass.hasAvailableSpots()).thenReturn(false);
+
+        when(userRepository.findById(any()))
+                .thenReturn(Optional.of(user));
+
+        when(classRepository.findById(any()))
+                .thenReturn(Optional.of(gymClass));
+
+        assertThrows(BusinessException.class,
+                () -> useCase.execute(request));
+
+        verify(reservationRepository, never()).save(any());
     }
 
     @Test
-    void shouldThrowValidationExceptionWhenRequestIsNull() {
-        // Arrange
-        CreateReservationRequest request = null;
+    void shouldThrowWhenDuplicateReservation() {
 
-        // Act
-        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
+        CreateReservationRequest request =
+                new CreateReservationRequest(
+                        UUID.randomUUID().toString(),
+                        UUID.randomUUID().toString()
+                );
 
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
-    }
+        User user = mock(User.class);
+        GymClass gymClass = mock(GymClass.class);
 
-    @Test
-    void shouldThrowValidationExceptionWhenUserIdIsNull() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                null,
-                "session-1",
-                true,
-                false,
-                true
-        );
+        when(user.isActive()).thenReturn(true);
+        when(gymClass.hasAvailableSpots()).thenReturn(true);
 
-        // Act
-        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
+        when(userRepository.findById(any()))
+                .thenReturn(Optional.of(user));
 
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
-    }
+        when(classRepository.findById(any()))
+                .thenReturn(Optional.of(gymClass));
 
-    @Test
-    void shouldThrowValidationExceptionWhenUserIdIsBlank() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                "   ",
-                "session-1",
-                true,
-                false,
-                true
-        );
+        when(reservationRepository.existsByUserIdAndClassId(any(), any()))
+                .thenReturn(true);
 
-        // Act
-        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
+        assertThrows(BusinessException.class,
+                () -> useCase.execute(request));
 
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
-    }
-
-    @Test
-    void shouldThrowValidationExceptionWhenSessionIdIsNull() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                "user-1",
-                null,
-                true,
-                false,
-                true
-        );
-
-        // Act
-        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
-
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
-    }
-
-    @Test
-    void shouldThrowValidationExceptionWhenSessionIdIsBlank() {
-        // Arrange
-        CreateReservationRequest request = new CreateReservationRequest(
-                "user-1",
-                "   ",
-                true,
-                false,
-                true
-        );
-
-        // Act
-        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
-
-        // Assert
-        verify(reservationRepository, never()).save(any(Reservation.class));
+        verify(reservationRepository, never()).save(any());
     }
 }
