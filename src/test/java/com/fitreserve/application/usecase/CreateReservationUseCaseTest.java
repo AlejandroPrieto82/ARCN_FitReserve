@@ -3,6 +3,7 @@ package com.fitreserve.application.usecase;
 import com.fitreserve.application.dto.CreateReservationRequest;
 import com.fitreserve.application.dto.CreateReservationResponse;
 import com.fitreserve.domain.exception.BusinessException;
+import com.fitreserve.domain.exception.ValidationException;
 import com.fitreserve.domain.model.Reservation;
 import com.fitreserve.domain.model.ReservationStatus;
 import com.fitreserve.domain.repository.ReservationRepository;
@@ -100,6 +101,90 @@ class CreateReservationUseCaseTest {
 
         // Act
         assertThrows(BusinessException.class, () -> createReservationUseCase.execute(request));
+
+        // Assert
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
+
+    @Test
+    void shouldThrowValidationExceptionWhenRequestIsNull() {
+        // Arrange
+        CreateReservationRequest request = null;
+
+        // Act
+        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
+
+        // Assert
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
+
+    @Test
+    void shouldThrowValidationExceptionWhenUserIdIsNull() {
+        // Arrange
+        CreateReservationRequest request = new CreateReservationRequest(
+                null,
+                "session-1",
+                true,
+                false,
+                true
+        );
+
+        // Act
+        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
+
+        // Assert
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
+
+    @Test
+    void shouldThrowValidationExceptionWhenUserIdIsBlank() {
+        // Arrange
+        CreateReservationRequest request = new CreateReservationRequest(
+                "   ",
+                "session-1",
+                true,
+                false,
+                true
+        );
+
+        // Act
+        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
+
+        // Assert
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
+
+    @Test
+    void shouldThrowValidationExceptionWhenSessionIdIsNull() {
+        // Arrange
+        CreateReservationRequest request = new CreateReservationRequest(
+                "user-1",
+                null,
+                true,
+                false,
+                true
+        );
+
+        // Act
+        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
+
+        // Assert
+        verify(reservationRepository, never()).save(any(Reservation.class));
+    }
+
+    @Test
+    void shouldThrowValidationExceptionWhenSessionIdIsBlank() {
+        // Arrange
+        CreateReservationRequest request = new CreateReservationRequest(
+                "user-1",
+                "   ",
+                true,
+                false,
+                true
+        );
+
+        // Act
+        assertThrows(ValidationException.class, () -> createReservationUseCase.execute(request));
 
         // Assert
         verify(reservationRepository, never()).save(any(Reservation.class));
