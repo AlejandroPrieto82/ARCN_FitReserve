@@ -10,6 +10,11 @@ public class CreateReservationResponse {
         this.message = message;
     }
 
-    public String getReservationId() { return reservationId; }
-    public String getMessage() { return message; }
+    public String getReservationId() {
+        return reservationId;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

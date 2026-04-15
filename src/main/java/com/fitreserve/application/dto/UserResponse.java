@@ -2,10 +2,10 @@ package com.fitreserve.application.dto;
 
 public class UserResponse {
 
-    private String id;
-    private String email;
-    private String role;
-    private boolean active;
+    private final String id;
+    private final String email;
+    private final String role;
+    private final boolean active;
 
     public UserResponse(String id, String email, String role, boolean active) {
         this.id = id;

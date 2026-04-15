@@ -1,9 +1,15 @@
 package com.fitreserve.application.usecase;
 
-import com.fitreserve.application.dto.*;
-import com.fitreserve.domain.exception.*;
-import com.fitreserve.domain.model.*;
-import com.fitreserve.domain.repository.*;
+import com.fitreserve.application.dto.CreateReservationRequest;
+import com.fitreserve.application.dto.CreateReservationResponse;
+import com.fitreserve.domain.exception.BusinessException;
+import com.fitreserve.domain.exception.NotFoundException;
+import com.fitreserve.domain.model.GymClass;
+import com.fitreserve.domain.model.Reservation;
+import com.fitreserve.domain.model.User;
+import com.fitreserve.domain.repository.GymClassRepository;
+import com.fitreserve.domain.repository.ReservationRepository;
+import com.fitreserve.domain.repository.UserRepository;
 import com.fitreserve.domain.valueobject.*;
 
 public class CreateReservationUseCase {

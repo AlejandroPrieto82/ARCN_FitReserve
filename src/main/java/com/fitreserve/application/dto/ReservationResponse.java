@@ -14,5 +14,19 @@ public class ReservationResponse {
         this.status = status;
     }
 
-    public String getId() { return id; }
+    public String getId() {
+        return id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getClassId() {
+        return classId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 }

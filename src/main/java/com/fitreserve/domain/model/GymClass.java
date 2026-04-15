@@ -5,7 +5,7 @@ import com.fitreserve.domain.valueobject.*;
 public class GymClass {
 
     private final ClassId id;
-    private final String name;
+    private String name;
     private final ClassType type;
     private final TimeSlot timeSlot;
     private final Cupo capacity;
@@ -31,8 +31,31 @@ public class GymClass {
         reserved++;
     }
 
-    public ClassId getId() { return id; }
-    public String getName() { return name; }
-    public ClassType getType() { return type; }
-    public Cupo getCapacity() { return capacity; }
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public ClassId getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ClassType getType() {
+        return type;
+    }
+
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
+    }
+
+    public Cupo getCapacity() {
+        return capacity;
+    }
+
+    public int getReserved() {
+        return reserved;
+    }
 }

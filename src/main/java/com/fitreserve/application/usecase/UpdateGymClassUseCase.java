@@ -18,6 +18,14 @@ public class UpdateGymClassUseCase {
         GymClass gymClass = repository.findById(ClassId.fromString(classId))
                 .orElseThrow(() -> new NotFoundException("Class not found"));
 
+        gymClass = new GymClass(
+                gymClass.getId(),
+                name,
+                gymClass.getType(),
+                gymClass.getTimeSlot(),
+                gymClass.getCapacity()
+        );
+
         return repository.save(gymClass);
     }
 }

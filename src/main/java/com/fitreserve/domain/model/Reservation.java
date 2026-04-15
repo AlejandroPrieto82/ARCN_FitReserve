@@ -20,8 +20,19 @@ public class Reservation {
         this.status = ReservationStatus.CANCELLED;
     }
 
-    public ReservationId getId() { return id; }
-    public UserId getUserId() { return userId; }
-    public ClassId getClassId() { return classId; }
-    public ReservationStatus getStatus() { return status; }
+    public ReservationId getId() {
+        return id;
+    }
+
+    public UserId getUserId() {
+        return userId;
+    }
+
+    public ClassId getClassId() {
+        return classId;
+    }
+
+    public ReservationStatus getStatus() {
+        return status;
+    }
 }

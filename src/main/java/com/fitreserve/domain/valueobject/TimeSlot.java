@@ -12,7 +12,7 @@ public class TimeSlot {
             throw new IllegalArgumentException("TimeSlot cannot be null");
         }
 
-        if (end.isBefore(start)) {
+        if (!end.isAfter(start)) {
             throw new IllegalArgumentException("End must be after start");
         }
 

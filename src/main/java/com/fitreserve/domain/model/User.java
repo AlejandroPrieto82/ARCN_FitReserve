@@ -18,13 +18,27 @@ public class User {
         this.active = true;
     }
 
-    public UserId getId() { return id; }
-    public Email getEmail() { return email; }
-    public Password getPassword() { return password; }
-    public UserRole getRole() { return role; }
-    public boolean isActive() { return active; }
-
     public void deactivate() {
         this.active = false;
+    }
+
+    public UserId getId() {
+        return id;
+    }
+
+    public Email getEmail() {
+        return email;
+    }
+
+    public Password getPassword() {
+        return password;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }
