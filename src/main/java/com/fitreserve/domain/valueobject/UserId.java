@@ -1,20 +1,19 @@
 package com.fitreserve.domain.valueobject;
 
 import java.util.Objects;
-import java.util.UUID;
 
 public class UserId {
 
-    private final UUID value;
+    private final String value;
 
-    public UserId(UUID value) {
-        if (value == null) {
-            throw new IllegalArgumentException("UserId cannot be null");
+    public UserId(String value) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException("UserId cannot be null or empty");
         }
         this.value = value;
     }
 
-    public UUID getValue() {
+    public String getValue() {
         return value;
     }
 

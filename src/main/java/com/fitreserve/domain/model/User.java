@@ -1,54 +1,45 @@
 package com.fitreserve.domain.model;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import com.fitreserve.domain.valueobject.Email;
-import com.fitreserve.domain.valueobject.Role;
+import com.fitreserve.domain.exception.BusinessException;
+import com.fitreserve.domain.valueobject.*;
 
 public class User {
 
-    private UUID id;
-    private String name;
-    private Email email;
-    private String passwordHash;
+    private final UserId id;
+    private final Email email;
+    private Password password;
+    private final Role role;
     private boolean active;
-    private Role role;
-    private LocalDateTime createdAt;
 
-    public User(UUID id, String name, Email email, String passwordHash, Role role) {
+    public User(UserId id, Email email, Password password, Role role) {
         this.id = id;
-        this.name = name;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.role = role;
         this.active = true;
-        this.createdAt = LocalDateTime.now();
     }
 
-    // 🔒 Business rules
     public void deactivate() {
+        if (!active) {
+            throw new BusinessException("User already deactivated");
+        }
         this.active = false;
-    }
-
-    public void activate() {
-        this.active = true;
-    }
-
-    public void changeRole(Role newRole) {
-        this.role = newRole;
     }
 
     public boolean isActive() {
         return active;
     }
 
-    public UUID getId() {
+    public UserId getId() {
         return id;
     }
 
     public Email getEmail() {
         return email;
+    }
+
+    public Password getPassword() {
+        return password;
     }
 
     public Role getRole() {
