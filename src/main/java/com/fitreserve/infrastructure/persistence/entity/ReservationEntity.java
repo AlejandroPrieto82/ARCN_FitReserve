@@ -15,7 +15,8 @@ public class ReservationEntity {
 
     private String status;
 
-    public ReservationEntity() {}
+    public ReservationEntity() {
+    }
 
     public ReservationEntity(UUID id, UUID userId, UUID classId, String status) {
         this.id = id;
@@ -24,8 +25,23 @@ public class ReservationEntity {
         this.status = status;
     }
 
-    public UUID getId() { return id; }
-    public UUID getUserId() { return userId; }
-    public UUID getClassId() { return classId; }
-    public String getStatus() { return status; }
+    public UUID getId() {
+        return id;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public UUID getClassId() {
+        return classId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

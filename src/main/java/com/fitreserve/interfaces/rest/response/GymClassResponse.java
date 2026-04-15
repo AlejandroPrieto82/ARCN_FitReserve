@@ -1,14 +1,16 @@
 package com.fitreserve.interfaces.rest.response;
 
+import com.fitreserve.domain.model.GymClass;
+
 public class GymClassResponse {
 
-    private String id;
-    private String name;
-    private String type;
-    private String startTime;
-    private String endTime;
-    private int capacity;
-    private int reserved;
+    private final String id;
+    private final String name;
+    private final String type;
+    private final String startTime;
+    private final String endTime;
+    private final int capacity;
+    private final int reserved;
 
     public GymClassResponse(String id, String name, String type,
                             String startTime, String endTime,
@@ -29,4 +31,16 @@ public class GymClassResponse {
     public String getEndTime() { return endTime; }
     public int getCapacity() { return capacity; }
     public int getReserved() { return reserved; }
+
+    public static GymClassResponse from(GymClass gymClass) {
+        return new GymClassResponse(
+                gymClass.getId().getValue().toString(),
+                gymClass.getName(),
+                gymClass.getType().name(),
+                gymClass.getTimeSlot().getStart().toString(),
+                gymClass.getTimeSlot().getEnd().toString(),
+                gymClass.getCapacity().getValue(),
+                gymClass.getReserved()
+        );
+    }
 }

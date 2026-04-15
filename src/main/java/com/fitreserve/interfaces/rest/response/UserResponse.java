@@ -1,5 +1,7 @@
 package com.fitreserve.interfaces.rest.response;
 
+import com.fitreserve.domain.model.User;
+
 public class UserResponse {
 
     private final String id;
@@ -18,4 +20,13 @@ public class UserResponse {
     public String getEmail() { return email; }
     public String getRole() { return role; }
     public boolean isActive() { return active; }
+
+    public static UserResponse from(User user) {
+        return new UserResponse(
+                user.getId().getValue().toString(),
+                user.getEmail().getValue(),
+                user.getRole().name(),
+                user.isActive()
+        );
+    }
 }

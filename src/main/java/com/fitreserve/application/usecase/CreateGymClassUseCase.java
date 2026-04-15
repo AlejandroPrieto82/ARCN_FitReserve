@@ -1,11 +1,8 @@
 package com.fitreserve.application.usecase;
 
-import com.fitreserve.domain.model.ClassType;
-import com.fitreserve.domain.model.GymClass;
+import com.fitreserve.domain.model.*;
 import com.fitreserve.domain.repository.GymClassRepository;
-import com.fitreserve.domain.valueobject.ClassId;
-import com.fitreserve.domain.valueobject.Cupo;
-import com.fitreserve.domain.valueobject.TimeSlot;
+import com.fitreserve.domain.valueobject.*;
 
 import java.util.UUID;
 

@@ -1,14 +1,15 @@
 package com.fitreserve.interfaces.rest.controller;
 
 import com.fitreserve.application.usecase.*;
-import com.fitreserve.interfaces.rest.request.CreateReservationRequest;
-import com.fitreserve.interfaces.rest.response.CreateReservationResponse;
-import com.fitreserve.interfaces.rest.response.ReservationResponse;
+import com.fitreserve.domain.model.Reservation;
 import com.fitreserve.shared.util.ApiResponse;
+import com.fitreserve.interfaces.rest.request.CreateReservationRequest;
+import com.fitreserve.interfaces.rest.response.ReservationResponse;
 
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/reservations")
@@ -27,8 +28,14 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ApiResponse<CreateReservationResponse> create(@RequestBody CreateReservationRequest request) {
-        return ApiResponse.of(createReservationUseCase.execute(request));
+    public ApiResponse<ReservationResponse> create(@RequestBody CreateReservationRequest request) {
+
+        Reservation reservation = createReservationUseCase.execute(
+                request.getUserId(),
+                request.getClassId()
+        );
+
+        return ApiResponse.of(ReservationResponse.from(reservation));
     }
 
     @DeleteMapping("/{id}")
@@ -39,6 +46,12 @@ public class ReservationController {
 
     @GetMapping("/user/{userId}")
     public ApiResponse<List<ReservationResponse>> getByUser(@PathVariable String userId) {
-        return ApiResponse.of(getUserReservationsUseCase.execute(userId));
+
+        return ApiResponse.of(
+                getUserReservationsUseCase.execute(userId)
+                        .stream()
+                        .map(ReservationResponse::from)
+                        .toList()
+        );
     }
 }

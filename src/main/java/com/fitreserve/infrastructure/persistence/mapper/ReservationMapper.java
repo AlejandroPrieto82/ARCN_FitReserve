@@ -11,15 +11,22 @@ public class ReservationMapper {
                 r.getId().getValue(),
                 r.getUserId().getValue(),
                 r.getClassId().getValue(),
-                r.getStatus().name()
-        );
+                r.getStatus().name());
     }
 
     public static Reservation toDomain(ReservationEntity e) {
-        return new Reservation(
+
+        Reservation reservation = new Reservation(
                 new ReservationId(e.getId()),
                 new UserId(e.getUserId()),
-                new ClassId(e.getClassId())
-        );
+                new ClassId(e.getClassId()));
+
+        if ("CANCELLED".equals(e.getStatus())) {
+            reservation.cancel();
+        }
+
+        return reservation;
     }
+
+    
 }

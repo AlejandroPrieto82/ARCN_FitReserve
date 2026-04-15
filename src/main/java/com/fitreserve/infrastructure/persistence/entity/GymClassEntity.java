@@ -20,11 +20,12 @@ public class GymClassEntity {
     private int capacity;
     private int reserved;
 
-    public GymClassEntity() {}
+    public GymClassEntity() {
+    }
 
     public GymClassEntity(UUID id, String name, String type,
-                          LocalDateTime startTime, LocalDateTime endTime,
-                          int capacity, int reserved) {
+            LocalDateTime startTime, LocalDateTime endTime,
+            int capacity, int reserved) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -34,11 +35,37 @@ public class GymClassEntity {
         this.reserved = reserved;
     }
 
-    public UUID getId() { return id; }
-    public String getName() { return name; }
-    public String getType() { return type; }
-    public LocalDateTime getStartTime() { return startTime; }
-    public LocalDateTime getEndTime() { return endTime; }
-    public int getCapacity() { return capacity; }
-    public int getReserved() { return reserved; }
+    public UUID getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getReserved() {
+        return reserved;
+    }
+
+    public void setReserved(int reserved) {
+        this.reserved = reserved;
+    }
+
+ 
 }

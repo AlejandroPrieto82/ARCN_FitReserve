@@ -9,44 +9,46 @@ import org.springframework.context.annotation.Configuration;
 public class UseCaseConfig {
 
     @Bean
-    public CreateUserUseCase createUserUseCase(UserRepository userRepository) {
-        return new CreateUserUseCase(userRepository);
+    public CreateUserUseCase createUserUseCase(UserRepository repo) {
+        return new CreateUserUseCase(repo);
     }
 
     @Bean
-    public DeactivateUserUseCase deactivateUserUseCase(UserRepository userRepository) {
-        return new DeactivateUserUseCase(userRepository);
+    public DeactivateUserUseCase deactivateUserUseCase(UserRepository repo) {
+        return new DeactivateUserUseCase(repo);
     }
 
     @Bean
-    public CreateGymClassUseCase createGymClassUseCase(GymClassRepository repository) {
-        return new CreateGymClassUseCase(repository);
+    public CreateGymClassUseCase createGymClassUseCase(GymClassRepository repo) {
+        return new CreateGymClassUseCase(repo);
+    }
+
+    @Bean
+    public DeleteGymClassUseCase deleteGymClassUseCase(GymClassRepository repo) {
+        return new DeleteGymClassUseCase(repo);
+    }
+
+    @Bean
+    public UpdateGymClassUseCase updateGymClassUseCase(GymClassRepository repo) {
+        return new UpdateGymClassUseCase(repo);
     }
 
     @Bean
     public CreateReservationUseCase createReservationUseCase(
-            ReservationRepository reservationRepository,
-            UserRepository userRepository,
-            GymClassRepository classRepository) {
-
-        return new CreateReservationUseCase(
-                reservationRepository,
-                userRepository,
-                classRepository
-        );
+            ReservationRepository reservationRepo,
+            UserRepository userRepo,
+            GymClassRepository classRepo
+    ) {
+        return new CreateReservationUseCase(reservationRepo, userRepo, classRepo);
     }
 
     @Bean
-    public CancelReservationUseCase cancelReservationUseCase(
-            ReservationRepository repository) {
-
-        return new CancelReservationUseCase(repository);
+    public CancelReservationUseCase cancelReservationUseCase(ReservationRepository repo) {
+        return new CancelReservationUseCase(repo);
     }
 
     @Bean
-    public GetUserReservationsUseCase getUserReservationsUseCase(
-            ReservationRepository repository) {
-
-        return new GetUserReservationsUseCase(repository);
+    public GetUserReservationsUseCase getUserReservationsUseCase(ReservationRepository repo) {
+        return new GetUserReservationsUseCase(repo);
     }
 }

@@ -1,11 +1,8 @@
 package com.fitreserve.infrastructure.persistence.mapper;
 
-import com.fitreserve.domain.model.User;
-import com.fitreserve.domain.model.UserRole;
+import com.fitreserve.domain.model.*;
 import com.fitreserve.domain.valueobject.*;
 import com.fitreserve.infrastructure.persistence.entity.UserEntity;
-
-import java.util.UUID;
 
 public class UserMapper {
 

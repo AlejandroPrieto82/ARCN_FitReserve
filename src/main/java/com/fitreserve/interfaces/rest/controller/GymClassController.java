@@ -5,9 +5,9 @@ import com.fitreserve.application.usecase.DeleteGymClassUseCase;
 import com.fitreserve.domain.model.GymClass;
 import com.fitreserve.shared.util.ApiResponse;
 import com.fitreserve.interfaces.rest.request.CreateGymClassRequest;
+import com.fitreserve.interfaces.rest.response.GymClassResponse;
 
 import org.springframework.web.bind.annotation.*;
-
 @RestController
 @RequestMapping("/classes")
 public class GymClassController {
@@ -16,15 +16,15 @@ public class GymClassController {
     private final DeleteGymClassUseCase deleteGymClassUseCase;
 
     public GymClassController(CreateGymClassUseCase createGymClassUseCase,
-                              DeleteGymClassUseCase deleteGymClassUseCase) {
+                               DeleteGymClassUseCase deleteGymClassUseCase) {
         this.createGymClassUseCase = createGymClassUseCase;
         this.deleteGymClassUseCase = deleteGymClassUseCase;
     }
 
     @PostMapping
-    public ApiResponse<GymClass> create(@RequestBody CreateGymClassRequest request) {
+    public ApiResponse<GymClassResponse> create(@RequestBody CreateGymClassRequest request) {
 
-        GymClass created = createGymClassUseCase.execute(
+        GymClass gymClass = createGymClassUseCase.execute(
                 request.getName(),
                 request.getType(),
                 request.getStartTime(),
@@ -32,12 +32,12 @@ public class GymClassController {
                 request.getCapacity()
         );
 
-        return new ApiResponse<>(created);
+        return ApiResponse.of(GymClassResponse.from(gymClass));
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<String> delete(@PathVariable String id) {
         deleteGymClassUseCase.execute(id);
-        return new ApiResponse<>("Class deleted");
+        return ApiResponse.of("Class deleted");
     }
 }

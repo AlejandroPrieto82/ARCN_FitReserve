@@ -1,7 +1,6 @@
 package com.fitreserve.application.usecase;
 
 import com.fitreserve.domain.exception.NotFoundException;
-import com.fitreserve.domain.model.User;
 import com.fitreserve.domain.repository.UserRepository;
 import com.fitreserve.domain.valueobject.UserId;
 
@@ -13,9 +12,9 @@ public class DeactivateUserUseCase {
         this.repository = repository;
     }
 
-    public void execute(String userId) {
+    public void execute(String userIdRaw) {
 
-        User user = repository.findById(UserId.fromString(userId))
+        var user = repository.findById(UserId.fromString(userIdRaw))
                 .orElseThrow(() -> new NotFoundException("User not found"));
 
         user.deactivate();

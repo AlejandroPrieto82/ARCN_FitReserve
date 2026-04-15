@@ -13,18 +13,12 @@ public class UpdateGymClassUseCase {
         this.repository = repository;
     }
 
-    public GymClass execute(String classId, String name) {
+    public GymClass execute(String classIdRaw, String name) {
 
-        GymClass gymClass = repository.findById(ClassId.fromString(classId))
+        GymClass gymClass = repository.findById(ClassId.fromString(classIdRaw))
                 .orElseThrow(() -> new NotFoundException("Class not found"));
 
-        gymClass = new GymClass(
-                gymClass.getId(),
-                name,
-                gymClass.getType(),
-                gymClass.getTimeSlot(),
-                gymClass.getCapacity()
-        );
+        gymClass.updateName(name);
 
         return repository.save(gymClass);
     }

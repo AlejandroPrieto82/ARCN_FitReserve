@@ -15,12 +15,12 @@ public class User {
     }
 
     public User(UserId id, Email email, Password password, UserRole role, boolean active) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.active = active;
-    }
+    this.id = id;
+    this.email = email;
+    this.password = password;
+    this.role = role;
+    this.active = active;
+}
 
     public UserId getId() { return id; }
     public Email getEmail() { return email; }

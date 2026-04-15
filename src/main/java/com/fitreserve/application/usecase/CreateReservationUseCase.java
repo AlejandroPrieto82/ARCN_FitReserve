@@ -2,17 +2,11 @@ package com.fitreserve.application.usecase;
 
 import com.fitreserve.domain.exception.BusinessException;
 import com.fitreserve.domain.exception.NotFoundException;
-import com.fitreserve.domain.model.GymClass;
-import com.fitreserve.domain.model.Reservation;
-import com.fitreserve.domain.model.User;
-import com.fitreserve.domain.repository.GymClassRepository;
-import com.fitreserve.domain.repository.ReservationRepository;
-import com.fitreserve.domain.repository.UserRepository;
-import com.fitreserve.domain.valueobject.ClassId;
-import com.fitreserve.domain.valueobject.ReservationId;
-import com.fitreserve.domain.valueobject.UserId;
-import com.fitreserve.interfaces.rest.request.CreateReservationRequest;
-import com.fitreserve.interfaces.rest.response.CreateReservationResponse;
+import com.fitreserve.domain.model.*;
+import com.fitreserve.domain.repository.*;
+import com.fitreserve.domain.valueobject.*;
+
+import java.util.UUID;
 
 public class CreateReservationUseCase {
 
@@ -30,10 +24,10 @@ public class CreateReservationUseCase {
         this.classRepository = classRepository;
     }
 
-    public CreateReservationResponse execute(CreateReservationRequest request) {
+    public Reservation execute(String userIdRaw, String classIdRaw) {
 
-        UserId userId = UserId.fromString(request.getUserId());
-        ClassId classId = ClassId.fromString(request.getClassId());
+        UserId userId = UserId.fromString(userIdRaw);
+        ClassId classId = ClassId.fromString(classIdRaw);
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
@@ -54,7 +48,7 @@ public class CreateReservationUseCase {
         }
 
         Reservation reservation = new Reservation(
-                ReservationId.generate(),
+                new ReservationId(UUID.randomUUID()),
                 userId,
                 classId
         );
@@ -64,9 +58,6 @@ public class CreateReservationUseCase {
         reservationRepository.save(reservation);
         classRepository.save(gymClass);
 
-        return new CreateReservationResponse(
-                reservation.getId().getValue().toString(),
-                "Reservation created"
-        );
+        return reservation;
     }
 }

@@ -1,5 +1,7 @@
 package com.fitreserve.interfaces.rest.response;
 
+import com.fitreserve.domain.model.Reservation;
+
 public class ReservationResponse {
 
     private final String id;
@@ -18,4 +20,13 @@ public class ReservationResponse {
     public String getUserId() { return userId; }
     public String getClassId() { return classId; }
     public String getStatus() { return status; }
+
+    public static ReservationResponse from(Reservation r) {
+        return new ReservationResponse(
+                r.getId().getValue().toString(),
+                r.getUserId().getValue().toString(),
+                r.getClassId().getValue().toString(),
+                r.getStatus().name()
+        );
+    }
 }

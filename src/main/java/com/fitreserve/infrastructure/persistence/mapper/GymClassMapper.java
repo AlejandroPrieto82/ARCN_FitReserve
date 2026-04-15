@@ -4,8 +4,6 @@ import com.fitreserve.domain.model.*;
 import com.fitreserve.domain.valueobject.*;
 import com.fitreserve.infrastructure.persistence.entity.GymClassEntity;
 
-import java.util.UUID;
-
 public class GymClassMapper {
 
     public static GymClassEntity toEntity(GymClass gymClass) {
@@ -16,17 +14,24 @@ public class GymClassMapper {
                 gymClass.getTimeSlot().getStart(),
                 gymClass.getTimeSlot().getEnd(),
                 gymClass.getCapacity().getValue(),
-                0
+                gymClass.getReserved()
         );
     }
 
     public static GymClass toDomain(GymClassEntity entity) {
-        return new GymClass(
+
+        GymClass gymClass = new GymClass(
                 new ClassId(entity.getId()),
                 entity.getName(),
                 ClassType.valueOf(entity.getType()),
                 new TimeSlot(entity.getStartTime(), entity.getEndTime()),
                 new Cupo(entity.getCapacity())
         );
+
+        for (int i = 0; i < entity.getReserved(); i++) {
+            gymClass.reserveSpot();
+        }
+
+        return gymClass;
     }
 }
