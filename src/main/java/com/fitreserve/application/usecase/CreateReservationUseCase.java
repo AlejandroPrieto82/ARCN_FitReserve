@@ -1,45 +1,61 @@
 package com.fitreserve.application.usecase;
 
-import com.fitreserve.application.dto.CreateReservationRequest;
-import com.fitreserve.application.dto.CreateReservationResponse;
-import com.fitreserve.domain.exception.ValidationException;
-import com.fitreserve.domain.model.Reservation;
-import com.fitreserve.domain.repository.ReservationRepository;
+import com.fitreserve.domain.exception.BusinessException;
+import com.fitreserve.domain.exception.NotFoundException;
+import com.fitreserve.domain.model.*;
+import com.fitreserve.domain.repository.*;
+import com.fitreserve.domain.valueobject.*;
 
 public class CreateReservationUseCase {
 
-	private final ReservationRepository reservationRepository;
+    private final ReservationRepository reservationRepository;
+    private final UserRepository userRepository;
+    private final GymClassRepository classRepository;
 
-	public CreateReservationUseCase(ReservationRepository reservationRepository) {
-		this.reservationRepository = reservationRepository;
-	}
+    public CreateReservationUseCase(
+            ReservationRepository reservationRepository,
+            UserRepository userRepository,
+            GymClassRepository classRepository) {
 
-	public CreateReservationResponse execute(CreateReservationRequest request) {
-		validateRequest(request);
+        this.reservationRepository = reservationRepository;
+        this.userRepository = userRepository;
+        this.classRepository = classRepository;
+    }
 
-		Reservation reservation = Reservation.create(
-				request.getUserId(),
-				request.getSessionId(),
-				request.isUserActive(),
-				request.isUserAlreadyReservedSession(),
-				request.isSessionHasAvailableCapacity()
-		);
+    public Reservation execute(String userIdRaw, String classIdRaw) {
 
-		Reservation savedReservation = reservationRepository.save(reservation);
-		return CreateReservationResponse.from(savedReservation);
-	}
+        UserId userId = UserId.fromString(userIdRaw);
+        ClassId classId = ClassId.fromString(classIdRaw);
 
-	private void validateRequest(CreateReservationRequest request) {
-		if (request == null) {
-			throw new ValidationException("CreateReservationRequest is required");
-		}
-		validateText(request.getUserId(), "userId is required");
-		validateText(request.getSessionId(), "sessionId is required");
-	}
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
 
-	private void validateText(String value, String message) {
-		if (value == null || value.isBlank()) {
-			throw new ValidationException(message);
-		}
-	}
+        if (!user.isActive()) {
+            throw new BusinessException("User inactive");
+        }
+
+        GymClass gymClass = classRepository.findById(classId)
+                .orElseThrow(() -> new NotFoundException("Class not found"));
+
+        if (!gymClass.hasAvailableSpots()) {
+            throw new BusinessException("Class full");
+        }
+
+        if (reservationRepository.existsByUserIdAndClassId(userId, classId)) {
+            throw new BusinessException("Already reserved");
+        }
+
+        Reservation reservation = new Reservation(
+                ReservationId.generate(),
+                userId,
+                classId
+        );
+
+        gymClass.reserveSpot();
+
+        reservationRepository.save(reservation);
+        classRepository.save(gymClass);
+
+        return reservation;
+    }
 }

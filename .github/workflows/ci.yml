@@ -24,10 +24,19 @@ jobs:
           java-version: 17
           cache: maven
 
-      - name: Build (sin tests)
-        run: mvn -B clean verify -DskipTests
+      - name: Build + Run Test
+        run: mvn -B clean verify
+
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: target/surefire-reports/
 
       - name: SonarCloud Scan
+        if: success()
         run: |
           mvn sonar:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
