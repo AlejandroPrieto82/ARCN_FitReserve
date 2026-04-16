@@ -4,8 +4,6 @@ import com.fitreserve.domain.model.*;
 import com.fitreserve.domain.repository.GymClassRepository;
 import com.fitreserve.domain.valueobject.*;
 
-import java.util.UUID;
-
 public class CreateGymClassUseCase {
 
     private final GymClassRepository repository;
@@ -17,7 +15,7 @@ public class CreateGymClassUseCase {
     public GymClass execute(String name, String type, String start, String end, int capacity) {
 
         GymClass gymClass = new GymClass(
-                new ClassId(UUID.randomUUID()),
+                ClassId.generate(),
                 name,
                 ClassType.valueOf(type.toUpperCase()),
                 TimeSlot.fromStrings(start, end),

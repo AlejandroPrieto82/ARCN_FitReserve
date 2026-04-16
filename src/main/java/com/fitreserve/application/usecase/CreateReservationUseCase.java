@@ -6,8 +6,6 @@ import com.fitreserve.domain.model.*;
 import com.fitreserve.domain.repository.*;
 import com.fitreserve.domain.valueobject.*;
 
-import java.util.UUID;
-
 public class CreateReservationUseCase {
 
     private final ReservationRepository reservationRepository;
@@ -48,7 +46,7 @@ public class CreateReservationUseCase {
         }
 
         Reservation reservation = new Reservation(
-                new ReservationId(UUID.randomUUID()),
+                ReservationId.generate(),
                 userId,
                 classId
         );

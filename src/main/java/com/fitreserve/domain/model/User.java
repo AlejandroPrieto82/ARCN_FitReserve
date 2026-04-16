@@ -10,17 +10,28 @@ public class User {
     private final UserRole role;
     private boolean active;
 
-    public User(UserId id, Email email, Password password, UserRole role) {
-        this(id, email, password, role, true);
+    private User(UserId id, Email email, Password password, UserRole role, boolean active) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.active = active;
     }
 
-    public User(UserId id, Email email, Password password, UserRole role, boolean active) {
-    this.id = id;
-    this.email = email;
-    this.password = password;
-    this.role = role;
-    this.active = active;
-}
+    public static User create(Email email, Password password, UserRole role) {
+        return new User(
+                UserId.generate(),
+                email,
+                password,
+                role,
+                true
+        );
+    }
+
+    // 🔥 RECONSTRUCCIÓN (BD / TESTS / PERSISTENCIA)
+    public static User restore(UserId id, Email email, Password password, UserRole role, boolean active) {
+        return new User(id, email, password, role, active);
+    }
 
     public UserId getId() { return id; }
     public Email getEmail() { return email; }

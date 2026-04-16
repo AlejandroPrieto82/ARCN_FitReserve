@@ -4,8 +4,6 @@ import com.fitreserve.domain.model.*;
 import com.fitreserve.domain.repository.UserRepository;
 import com.fitreserve.domain.valueobject.*;
 
-import java.util.UUID;
-
 public class CreateUserUseCase {
 
     private final UserRepository repository;
@@ -18,8 +16,7 @@ public class CreateUserUseCase {
 
         UserRole role = UserRole.valueOf(roleRaw.toUpperCase());
 
-        User user = new User(
-                new UserId(UUID.randomUUID()),
+        User user = User.create(
                 new Email(email),
                 new Password(password),
                 role

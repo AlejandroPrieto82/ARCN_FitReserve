@@ -21,7 +21,7 @@ public class GymClassMapper {
     public static GymClass toDomain(GymClassEntity entity) {
 
         GymClass gymClass = new GymClass(
-                new ClassId(entity.getId()),
+                ClassId.fromString(entity.getId().toString()),
                 entity.getName(),
                 ClassType.valueOf(entity.getType()),
                 new TimeSlot(entity.getStartTime(), entity.getEndTime()),

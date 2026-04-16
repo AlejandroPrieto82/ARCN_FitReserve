@@ -11,15 +11,17 @@ public class ReservationMapper {
                 r.getId().getValue(),
                 r.getUserId().getValue(),
                 r.getClassId().getValue(),
-                r.getStatus().name());
+                r.getStatus().name()
+        );
     }
 
     public static Reservation toDomain(ReservationEntity e) {
 
         Reservation reservation = new Reservation(
-                new ReservationId(e.getId()),
-                new UserId(e.getUserId()),
-                new ClassId(e.getClassId()));
+                ReservationId.fromString(e.getId().toString()),
+                UserId.fromString(e.getUserId().toString()),
+                ClassId.fromString(e.getClassId().toString())
+        );
 
         if ("CANCELLED".equals(e.getStatus())) {
             reservation.cancel();
@@ -27,6 +29,4 @@ public class ReservationMapper {
 
         return reservation;
     }
-
-    
 }
