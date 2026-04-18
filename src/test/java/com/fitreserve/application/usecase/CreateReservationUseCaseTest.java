@@ -40,7 +40,7 @@ class CreateReservationUseCaseTest {
 
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
         when(gymClassRepository.findById(any())).thenReturn(Optional.of(gymClass));
-        when(reservationRepository.existsByUserIdAndClassId(any(), any())).thenReturn(false);
+        when(reservationRepository.existsActiveByUserIdAndClassId(any(), any())).thenReturn(false);
 
         Reservation result = useCase.execute(userId, classId);
 
@@ -109,7 +109,7 @@ class CreateReservationUseCaseTest {
 
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
         when(gymClassRepository.findById(any())).thenReturn(Optional.of(gymClass));
-        when(reservationRepository.existsByUserIdAndClassId(any(), any())).thenReturn(true);
+        when(reservationRepository.existsActiveByUserIdAndClassId(any(), any())).thenReturn(true);
 
         assertThrows(BusinessException.class,
                 () -> useCase.execute(userId, classId));

@@ -47,4 +47,13 @@ public class ReservationRepositoryImpl implements ReservationRepository {
                 classId.getValue()
         );
     }
+
+    @Override
+    public boolean existsActiveByUserIdAndClassId(UserId userId, ClassId classId) {
+        return jpaRepository.existsByUserIdAndClassIdAndStatus(
+                userId.getValue(),
+                classId.getValue(),
+                "ACTIVE"
+        );
+    }
 }

@@ -31,6 +31,12 @@ public class GymClass {
         reserved++;
     }
 
+    public void unreserveSpot() {
+        if (reserved > 0) {
+            reserved--;
+        }
+    }
+
     public void updateName(String name) {
         this.name = name;
     }
