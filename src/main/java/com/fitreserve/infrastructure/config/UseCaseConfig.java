@@ -39,6 +39,13 @@ public class UseCaseConfig {
     }
 
     @Bean
+    public GetAvailableGymClassesForUserUseCase getAvailableGymClassesForUserUseCase(
+            GymClassRepository classRepo,
+            ReservationRepository reservationRepo) {
+        return new GetAvailableGymClassesForUserUseCase(classRepo, reservationRepo);
+    }
+
+    @Bean
     public CreateReservationUseCase createReservationUseCase(
             ReservationRepository reservationRepo,
             UserRepository userRepo,
