@@ -41,7 +41,7 @@ public class CreateReservationUseCase {
             throw new BusinessException("Class full");
         }
 
-        if (reservationRepository.existsByUserIdAndClassId(userId, classId)) {
+        if (reservationRepository.existsActiveByUserIdAndClassId(userId, classId)) {
             throw new BusinessException("Already reserved");
         }
 

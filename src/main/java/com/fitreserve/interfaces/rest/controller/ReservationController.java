@@ -1,7 +1,10 @@
 package com.fitreserve.interfaces.rest.controller;
 
 import com.fitreserve.application.usecase.*;
+import com.fitreserve.domain.model.GymClass;
 import com.fitreserve.domain.model.Reservation;
+import com.fitreserve.domain.repository.GymClassRepository;
+import com.fitreserve.domain.valueobject.ClassId;
 import com.fitreserve.shared.util.ApiResponse;
 import com.fitreserve.interfaces.rest.request.CreateReservationRequest;
 import com.fitreserve.interfaces.rest.response.ReservationResponse;
@@ -9,7 +12,6 @@ import com.fitreserve.interfaces.rest.response.ReservationResponse;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/reservations")
@@ -18,13 +20,16 @@ public class ReservationController {
     private final CreateReservationUseCase createReservationUseCase;
     private final CancelReservationUseCase cancelReservationUseCase;
     private final GetUserReservationsUseCase getUserReservationsUseCase;
+    private final GymClassRepository classRepository;
 
     public ReservationController(CreateReservationUseCase createReservationUseCase,
                                  CancelReservationUseCase cancelReservationUseCase,
-                                 GetUserReservationsUseCase getUserReservationsUseCase) {
+                                 GetUserReservationsUseCase getUserReservationsUseCase,
+                                 GymClassRepository classRepository) {
         this.createReservationUseCase = createReservationUseCase;
         this.cancelReservationUseCase = cancelReservationUseCase;
         this.getUserReservationsUseCase = getUserReservationsUseCase;
+        this.classRepository = classRepository;
     }
 
     @PostMapping
@@ -35,7 +40,7 @@ public class ReservationController {
                 request.getClassId()
         );
 
-        return ApiResponse.of(ReservationResponse.from(reservation));
+        return ApiResponse.of(toReservationResponse(reservation));
     }
 
     @DeleteMapping("/{id}")
@@ -50,8 +55,16 @@ public class ReservationController {
         return ApiResponse.of(
                 getUserReservationsUseCase.execute(userId)
                         .stream()
-                        .map(ReservationResponse::from)
+                        .map(this::toReservationResponse)
                         .toList()
         );
+    }
+
+    private ReservationResponse toReservationResponse(Reservation reservation) {
+        GymClass gymClass = classRepository.findById(
+                ClassId.from(reservation.getClassId().getValue())
+        ).orElse(null);
+
+        return ReservationResponse.from(reservation, gymClass);
     }
 }

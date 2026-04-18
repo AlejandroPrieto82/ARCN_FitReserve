@@ -17,4 +17,6 @@ public interface ReservationRepository {
     List<Reservation> findByUserId(UserId userId);
 
     boolean existsByUserIdAndClassId(UserId userId, ClassId classId);
+
+    boolean existsActiveByUserIdAndClassId(UserId userId, ClassId classId);
 }

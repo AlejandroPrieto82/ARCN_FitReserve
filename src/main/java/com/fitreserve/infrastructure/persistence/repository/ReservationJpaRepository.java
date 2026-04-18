@@ -11,4 +11,6 @@ public interface ReservationJpaRepository extends JpaRepository<ReservationEntit
     List<ReservationEntity> findByUserId(UUID userId);
 
     boolean existsByUserIdAndClassId(UUID userId, UUID classId);
+
+    boolean existsByUserIdAndClassIdAndStatus(UUID userId, UUID classId, String status);
 }

@@ -54,8 +54,10 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public CancelReservationUseCase cancelReservationUseCase(ReservationRepository repo) {
-        return new CancelReservationUseCase(repo);
+    public CancelReservationUseCase cancelReservationUseCase(
+            ReservationRepository repo,
+            GymClassRepository classRepo) {
+        return new CancelReservationUseCase(repo, classRepo);
     }
 
     @Bean
