@@ -2,10 +2,11 @@ package com.fitreserve.interfaces.rest.controller;
 
 import com.fitreserve.application.usecase.CreateUserUseCase;
 import com.fitreserve.application.usecase.DeactivateUserUseCase;
-import com.fitreserve.application.usecase.GetUserByIdUseCase;
+import com.fitreserve.application.usecase.LoginUseCase;
 import com.fitreserve.domain.model.User;
 import com.fitreserve.shared.util.ApiResponse;
 import com.fitreserve.interfaces.rest.request.CreateUserRequest;
+import com.fitreserve.interfaces.rest.request.LoginRequest;
 import com.fitreserve.interfaces.rest.response.UserResponse;
 
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +17,14 @@ public class UserController {
 
     private final CreateUserUseCase createUserUseCase;
     private final DeactivateUserUseCase deactivateUserUseCase;
-    private final GetUserByIdUseCase getUserByIdUseCase;
+    private final LoginUseCase loginUseCase;
 
     public UserController(CreateUserUseCase createUserUseCase,
             DeactivateUserUseCase deactivateUserUseCase,
-            GetUserByIdUseCase getUserByIdUseCase) {
+            LoginUseCase loginUseCase) {
         this.createUserUseCase = createUserUseCase;
         this.deactivateUserUseCase = deactivateUserUseCase;
-        this.getUserByIdUseCase = getUserByIdUseCase;
+        this.loginUseCase = loginUseCase;
     }
 
     @PostMapping
@@ -37,9 +38,10 @@ public class UserController {
         return ApiResponse.of(UserResponse.from(user));
     }
 
-    @GetMapping("/{id}")
-    public ApiResponse<UserResponse> getById(@PathVariable String id) {
-        return ApiResponse.of(UserResponse.from(getUserByIdUseCase.execute(id)));
+    @PostMapping("/login")
+    public ApiResponse<UserResponse> login(@RequestBody LoginRequest request) {
+        User user = loginUseCase.execute(request.getEmail(), request.getPassword());
+        return ApiResponse.of(UserResponse.from(user));
     }
 
     @DeleteMapping("/{id}")

@@ -19,8 +19,8 @@ public class UseCaseConfig {
     }
 
     @Bean
-    public GetUserByIdUseCase getUserByIdUseCase(UserRepository repo) {
-        return new GetUserByIdUseCase(repo);
+    public LoginUseCase loginUseCase(UserRepository repo) {
+        return new LoginUseCase(repo);
     }
 
     @Bean
