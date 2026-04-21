@@ -2,6 +2,8 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 export default withMermaid(defineConfig({
+  base: '/ARCN_FitReserve/', 
+
   title: 'FitReserve Backend',
   description: 'Documentación técnica del backend de reservas FitReserve',
   cleanUrls: true,
@@ -34,7 +36,7 @@ export default withMermaid(defineConfig({
       }
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/AlejandroPrieto82/ARCN_FitReserve' }
+      { icon: 'github', link: 'https://github.com/esteban0903/ARCN_FitReserve' }
     ],
     search: {
       provider: 'local'
