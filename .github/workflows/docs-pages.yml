@@ -3,7 +3,8 @@ name: Docs Pages
 on:
   push:
     branches:
-      - main
+      - develop
+      - feature/docs
   workflow_dispatch:
 
 permissions:
@@ -37,6 +38,10 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      # (opcional pero recomendado)
+      - name: Add .nojekyll
+        run: touch docs/.vitepress/dist/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
