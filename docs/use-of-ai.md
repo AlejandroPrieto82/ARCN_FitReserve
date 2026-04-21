@@ -5,7 +5,7 @@ La IA se utilizó como copiloto técnico bajo un enfoque dirigido por contexto. 
 Este enfoque permitió mantener consistencia técnica con Clean Architecture y DDD, evitando respuestas ambiguas o implementaciones fuera del diseño del sistema.
 
 ## Base de contexto utilizada
-La interacción con IA partió del documento [context.md](../context.md), usado como README de contexto del proyecto. Ese documento definió, antes de pedir implementación, un marco técnico explícito con:
+La interacción con IA partió del documento [context.md](./context.md), usado como README de contexto del proyecto. Ese documento definió, antes de pedir implementación, un marco técnico explícito con:
 - Contexto funcional del negocio (reservas, validación de cupos, conflicto de horarios, estado de usuario).
 - Arquitectura objetivo (Clean Architecture por capas con separación estricta de responsabilidades).
 - Modelo DDD (entidades, agregado principal, reglas de negocio y eventos de dominio).
