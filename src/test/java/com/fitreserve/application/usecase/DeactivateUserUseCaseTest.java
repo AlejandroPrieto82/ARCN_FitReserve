@@ -44,4 +44,11 @@ class DeactivateUserUseCaseTest {
         assertThrows(RuntimeException.class,
                 () -> useCase.execute(userId));
     }
+
+    @Test
+    void shouldThrowIllegalArgumentException_WhenUserIdIsInvalidUUID() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> useCase.execute("not-a-uuid"));
+    }
 }
