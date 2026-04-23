@@ -46,4 +46,11 @@ class UpdateGymClassUseCaseTest {
                         "Updated Name"
                 ));
     }
+
+    @Test
+    void shouldThrowIllegalArgumentException_WhenClassIdIsInvalidUUID() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> useCase.execute("not-a-uuid", "Updated Name"));
+    }
 }

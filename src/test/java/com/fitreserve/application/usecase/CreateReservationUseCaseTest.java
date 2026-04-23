@@ -114,4 +114,34 @@ class CreateReservationUseCaseTest {
         assertThrows(BusinessException.class,
                 () -> useCase.execute(userId, classId));
     }
+
+    @Test
+    void shouldThrowNotFoundException_WhenClassDoesNotExist() {
+
+        String userId = UUID.randomUUID().toString();
+        String classId = UUID.randomUUID().toString();
+
+        User user = mock(User.class);
+        when(user.isActive()).thenReturn(true);
+
+        when(userRepository.findById(any())).thenReturn(Optional.of(user));
+        when(gymClassRepository.findById(any())).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class,
+                () -> useCase.execute(userId, classId));
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentException_WhenUserIdIsInvalidUUID() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> useCase.execute("invalid-uuid", UUID.randomUUID().toString()));
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentException_WhenClassIdIsInvalidUUID() {
+
+        assertThrows(IllegalArgumentException.class,
+                () -> useCase.execute(UUID.randomUUID().toString(), "invalid-uuid"));
+    }
 }
