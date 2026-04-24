@@ -46,6 +46,7 @@ Modulos incluidos:
 - Endpoint operativo de salud (`/health`)
 
 ## Navegación Rápida
+- [Sobre Nosotros](./about-us)
 - [Arquitectura](./architecture)
 - [Modelo de Dominio](./domain-model)
 - [Casos de Uso](./use-cases)

@@ -10,6 +10,7 @@ export default withMermaid(defineConfig({
   themeConfig: {
     nav: [
       { text: 'Inicio', link: '/' },
+      { text: 'About Us', link: '/about-us' },
       { text: 'Arquitectura', link: '/architecture' },
       { text: 'API', link: '/api' },
       { text: 'Despliegue', link: '/deployment' }
