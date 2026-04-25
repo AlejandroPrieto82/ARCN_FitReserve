@@ -29,23 +29,34 @@ features:
 ---
 
 ## Alcance del Proyecto
+
 Esta documentación cubre el backend actualmente implementado en este repositorio.
 
 ## Introducción Arquitectónica
+
 FitReserve está implementado como un **monolito modular**.
 
 El estilo arquitectónico es **Clean Architecture** con estructura **Onion**:
+
 - El dominio y los casos de uso están al centro.
 - Infraestructura y web quedan en capas externas.
 - Las dependencias apuntan hacia adentro, protegiendo la lógica de negocio.
 
 Modulos incluidos:
+
 - Usuarios (flujo simplificado: crear, login, desactivar)
 - Clases de gimnasio (crear, listar, eliminar)
 - Reservas (crear, cancelar, historial por usuario)
 - Endpoint operativo de salud (`/health`)
 
+## Demo
+
+Aquí puedes ver una demostración interactiva del proyecto en funcionamiento y su flujo completo:
+
+https://youtu.be/Yz_aBCBNhgM
+
 ## Navegación Rápida
+
 - [Sobre Nosotros](./about-us)
 - [Arquitectura](./architecture)
 - [Modelo de Dominio](./domain-model)
